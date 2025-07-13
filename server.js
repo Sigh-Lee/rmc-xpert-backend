@@ -58,3 +58,6 @@ app.post("/api/client/set-mt5", async (req, res) => {
   );
   res.json({ message: "Client MT5 credentials saved ✅" });
 });
+
+const symbolRoutes = require('./routes/symbolRoutes');
+app.use('/api', symbolRoutes);
