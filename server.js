@@ -37,3 +37,24 @@ app.post("/api/mentor/set-mt5", async (req, res) => {
   );
   res.json({ message: "Mentor MT5 credentials saved ✅" });
 });
+
+// Add to server.js or routes/client.js
+app.post("/api/client/set-mt5", async (req, res) => {
+  const { licenseKey, mt5Login, mt5Password, mt5Server } = req.body;
+  const client = await db.collection("licenses").findOne({ licenseKey });
+  if (!client) return res.status(400).json({ error: "Invalid license" });
+
+  await db.collection("clients").updateOne(
+    { licenseKey },
+    {
+      $set: {
+        mt5Login,
+        mt5Password,
+        mt5Server,
+        mentorId: client.mentorId
+      }
+    },
+    { upsert: true }
+  );
+  res.json({ message: "Client MT5 credentials saved ✅" });
+});
