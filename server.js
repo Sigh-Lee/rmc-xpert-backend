@@ -26,3 +26,14 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// Add to server.js or routes/mentor.js
+app.post("/api/mentor/set-mt5", async (req, res) => {
+  const { mentorId, mt5Login, mt5Password, mt5Server } = req.body;
+  await db.collection("mentors").updateOne(
+    { mentorId },
+    { $set: { mt5Login, mt5Password, mt5Server } },
+    { upsert: true }
+  );
+  res.json({ message: "Mentor MT5 credentials saved ✅" });
+});
